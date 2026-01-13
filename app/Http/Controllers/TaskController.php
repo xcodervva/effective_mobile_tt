@@ -30,4 +30,20 @@ class TaskController extends Controller
 
         return Task::create($validated);
     }
+
+    //PUT /tasks{id}
+    public function update(Request $request, $id)
+    {
+        $task = Task::findOrFail($id);
+
+        $validated = $request->validate([
+            'title' => 'required|string',
+            'description' => 'nullable|string',
+            'status' => 'required|string'
+        ]);
+
+        $task->update($validated);
+
+        return $task;
+    }
 }
