@@ -7,8 +7,13 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    //GET /index
+    //GET /tasks
     public function index() {
         return Task::all();
+    }
+
+    //GET /tasks/{id}
+    public function show($id) {
+        return Task::findOrFail($id);
     }
 }
