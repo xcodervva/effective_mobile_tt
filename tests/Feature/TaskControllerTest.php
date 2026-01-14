@@ -38,3 +38,21 @@ it('shows a single task, negative', function () {
             'message',
         ]);
 });
+
+it('creates a task', function () {
+    $data = [
+        'title' => 'Test task',
+        'description' => 'Test description',
+        'status' => 'new',
+    ];
+
+    $response = $this->postJson('/api/tasks', $data);
+
+    $response
+        ->assertStatus(201)
+        ->assertJsonFragment(['title' => 'Test task']);
+
+    $this->assertDatabaseHas('tasks', [
+        'title' => 'Test task',
+    ]);
+});
