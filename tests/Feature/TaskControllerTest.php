@@ -26,3 +26,15 @@ it('shows a single task, positive', function () {
             'status' => $task->status,
         ]);
 });
+
+it('shows a single task, negative', function () {
+    $nonExistentId = 333;
+
+    $response = $this->getJson("/api/tasks/{$nonExistentId}");
+
+    $response
+        ->assertStatus(404)
+        ->assertJsonStructure([
+            'message',
+        ]);
+});
