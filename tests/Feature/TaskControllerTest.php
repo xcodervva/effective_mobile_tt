@@ -56,3 +56,56 @@ it('creates a task', function () {
         'title' => 'Test task',
     ]);
 });
+
+it('updates a task, set status=done', function () {
+    $task = Task::factory()->create();
+
+    $response = $this->putJson("/api/tasks/{$task->id}", [
+        'title' => 'Updated title',
+        'description' => 'Updated',
+        'status' => 'done',
+    ]);
+
+    $response->assertStatus(200);
+
+    $this->assertDatabaseHas('tasks', [
+        'id' => $task->id,
+        'status' => 'done',
+    ]);
+});
+
+it('updates a task, set status=active', function () {
+    $task = Task::factory()->create();
+
+    $response = $this->putJson("/api/tasks/{$task->id}", [
+        'title' => 'Updated title',
+        'description' => 'Updated',
+        'status' => 'active',
+    ]);
+
+    $response->assertStatus(200);
+
+    $this->assertDatabaseHas('tasks', [
+        'id' => $task->id,
+        'status' => 'active',
+    ]);
+});
+
+it('fails to update task with invalid status', function () {
+    $task = Task::factory()->create();
+
+    $response = $this->putJson("/api/tasks/{$task->id}", [
+        'title' => 'Updated title',
+        'description' => 'Updated',
+        'status' => 'invalid_status',
+    ]);
+
+    $response
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['status']);
+
+    $this->assertDatabaseHas('tasks', [
+        'id' => $task->id,
+        'status' => $task->status,
+    ]);
+});

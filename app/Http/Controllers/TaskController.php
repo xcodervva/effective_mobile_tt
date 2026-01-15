@@ -39,7 +39,7 @@ class TaskController extends Controller
         $validated = $request->validate([
             'title' => 'required|string',
             'description' => 'nullable|string',
-            'status' => 'required|string'
+            'status' => ['required', 'string', 'in:active,done,new']
         ]);
 
         $task->update($validated);
