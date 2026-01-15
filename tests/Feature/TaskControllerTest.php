@@ -127,3 +127,14 @@ it('deletes a task, negative', function () {
 
     $response->assertStatus(404);
 });
+
+it('validates required title', function () {
+    $response = $this->postJson('/api/tasks', [
+        'description' => 'No title',
+        'status' => 'new',
+    ]);
+
+    $response
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['title']);
+});
