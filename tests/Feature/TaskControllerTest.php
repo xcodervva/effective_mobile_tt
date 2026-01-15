@@ -109,3 +109,21 @@ it('fails to update task with invalid status', function () {
         'status' => $task->status,
     ]);
 });
+
+it('deletes a task, positive', function () {
+    $task = Task::factory()->create();
+
+    $response = $this->deleteJson("/api/tasks/{$task->id}");
+
+    $response->assertStatus(200);
+
+    $this->assertDatabaseMissing('tasks', [
+        'id' => $task->id,
+    ]);
+});
+
+it('deletes a task, negative', function () {
+    $response = $this->deleteJson('/api/tasks/444');
+
+    $response->assertStatus(404);
+});
